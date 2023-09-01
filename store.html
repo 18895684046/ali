@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head> </head>
+
+<body></body>
+<script>
+  var timer;
+  function isIos(ipadIsMobdile = true) {
+    if (ipadIsMobdile) {
+      return (
+        !!navigator.userAgent.match(/iPhone|iPad|iPod|Mac OS/i) &&
+        "ontouchend" in document
+      );
+    } else {
+      return !!navigator.userAgent.match(/iPhone|iPod/i);
+    }
+  }
+
+  function isAndriod() {
+    return !!navigator.userAgent.match(/Android/i);
+  }
+
+  function jumpToStore(storeLink) {
+    window.location = "com.pandadagames.ninja.global://xxx";
+
+    timer = setTimeout(function () {
+      window.location = storeLink;
+    }, 1000);
+  }
+
+  function jumpToAppleStore() {
+    jumpToStore("https://apps.apple.com/us/app/ninja-must-die/id1628517224");
+  }
+  function jumpToGoogleStore() {
+    jumpToStore(
+      "https://play.google.com/store/apps/details?id=com.pandadagames.ninja.global&pli=1"
+    );
+  }
+
+  function getQueryLang() {
+    const search = window.location.search
+    // 兼容半周年庆繁体中文
+    let curSearchLang = "tc"
+    if (search) {
+      curSearchLang = search.split("?")[1].split("=")[1]
+    }
+    return curSearchLang
+  }
+
+  function jump() {
+    const queryLang = getQueryLang()
+    if (isIos()) {
+      jumpToAppleStore();
+    } else if (isAndriod()) {
+      jumpToGoogleStore();
+    } else {
+      window.location = `https://www.pandadagames.com/${queryLang}/`;
+    }
+  }
+
+  function init() {
+    window.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        // 如果页面隐藏了，则表示唤起成功，这时候需要清除下载定时器
+        clearTimeout(timer);
+      }
+    });
+    jump();
+  }
+
+  init();
+
+</script>
+
+</html>
